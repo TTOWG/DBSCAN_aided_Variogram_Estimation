@@ -47,13 +47,13 @@ TrimmedData$DEPTH.m. =ActualDepths
 Coordinates = round(read.csv(file.choose(),header=T),digits = 2)
 
 SmartTrimmedData = data.frame(TrimmedData$BoreHole,TrimmedData$DEPTH.m.,round(TrimmedData$Porosity, digits = 4),Coordinates$Easting,Coordinates$Northing)
-
+names(SmartTrimmedData) = c("BoreHoleID", "Depth", "Porosity", "x", "y")
 
 
 #On CUT2 data (Samples between Q1-IQR and Q3+IQR )
 SpatialTrimmedDataCUT2 = SmartTrimmedData[SmartTrimmedData$Porosity<0.3994&SmartTrimmedData$Porosity>0.0826, ]
 
-names(SpatialTrimmedDataCUT2) = c("BoreHoleID", "Depth", "Porosity", "x", "y")
+#names(SpatialTrimmedDataCUT2) = c("BoreHoleID", "Depth", "Porosity", "x", "y")
 coordinates(SpatialTrimmedDataCUT2) = c("x","y","Depth")
 
 
@@ -64,15 +64,15 @@ ggplot(data = Porosity_VariogramCloudCUT2_90_22.5)+
   labs(x = "Lag Distance, m", y = "Porosity Pair Variogram")+
   scale_x_continuous(breaks = seq(0, 8000, by = 1000))+
   scale_y_continuous(breaks = seq(0, 0.06, by = 0.01))
-ggsave("Porosity Variogram Cloud_CUT2_90_22.5.jpg", path = "C://Users//TTOWG//645//1 karia def//2. CU//Projects//Bitumen Recovery//Data Analysis//Spatial Analysis//Agbabu Spatial Analysis using gstat//Plots//Field-wide Porosity Analysis", dpi = 96)
+ggsave("Porosity Variogram Cloud_CUT2_90_22.5.jpg", dpi = 96)
 
 CloudMarginal = ggplot(data = Porosity_VariogramCloudCUT2_90_22.5)+
   geom_point(mapping = aes(x = dist, y = gamma), color = "blue")+
   labs(x = "Lag Distance, m", y = "Porosity Pair Variogram")+
   scale_x_continuous(breaks = seq(0, 8000, by = 1000))+
   scale_y_continuous(breaks = seq(0, 0.06, by = 0.01))
-ggMarginal(CloudMarginal, type = "histogram", margins = "x")
-ggsave("Porosity Variogram Cloud_CUT2_90_22.5_marginal.jpg", path = "C://Users//TTOWG//645//1 karia def//2. CU//Projects//Bitumen Recovery//Data Analysis//Spatial Analysis//Agbabu Spatial Analysis using gstat//Plots//Field-wide Porosity Analysis", dpi = 96)
+ggMarginal(CloudMarginal, type = "histogram", margins = "x", fill = "green")
+ggsave("Porosity Variogram Cloud_CUT2_90_22.5_marginal.jpg", dpi = 96)
 
 
 #intersamplepointdistances_histogram_90 = hist(Porosity_VariogramCloudCUT2_90_22.5$dist,freq = T, breaks = seq(from = 0, to = 8000, by = 500),col = "grey", ylim =  range(0,5000), xlab="Inter-sample-point Distances",ylab = "Frequency", las = 3)
@@ -88,7 +88,7 @@ ggplot(data = Porosity_VariogramCUT2_90_22.5)+
   scale_x_continuous(breaks = seq(0, 8000, by = 1000))+
   scale_y_continuous(breaks = seq(0, 0.006, by = 0.001))+
   geom_line(color = "red",aes(x = dist, y = gamma))
-ggsave("Porosity Emperical Variogram_CUT2_90_22.5.jpg", path = "C://Users//TTOWG//645//1 karia def//2. CU//Projects//Bitumen Recovery//Data Analysis//Spatial Analysis//Agbabu Spatial Analysis using gstat//Plots//Field-wide Porosity Analysis", dpi = 96)
+ggsave("Porosity Emperical Variogram_CUT2_90_22.5.jpg", dpi = 96)
 
 
 # Fitting to Model - conventional approach (bin-based)
@@ -120,7 +120,7 @@ ggplot(data = Porosity_VariogramCUT2_90_22.5, aes(x = dist, y = gamma))+
   theme(legend.position=c(0.6, 0.3))+
   theme(legend.title = element_blank())+
   theme(legend.background = element_rect(fill="lightgrey", size=0.5, linetype="solid"))
-ggsave("Porosity Emperical&Fitted Variogram_CUT2_90_22.5_binbased.jpg", path = "C://Users//TTOWG//645//1 karia def//2. CU//Projects//Bitumen Recovery//Data Analysis//Spatial Analysis//Agbabu Spatial Analysis using gstat//Plots//Field-wide Porosity Analysis//Model Fits", dpi = 96)
+ggsave("Porosity Emperical&Fitted Variogram_CUT2_90_22.5_binbased.jpg", dpi = 96)
 
 
 # Obtaining empirical variogram - dbscan-aided approach
